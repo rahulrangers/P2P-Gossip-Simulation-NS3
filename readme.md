@@ -60,7 +60,7 @@ The simulation generates an XML file (`p2p-gossip-tcp-animation.xml`) that can b
 
 ## Demo Visualization
 
-[📽️ Demo Video](demo.webm)
+[📽️ Demo Video](demo.mp4)
 
 
 ## Understanding the Code
