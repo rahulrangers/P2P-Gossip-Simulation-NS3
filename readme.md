@@ -57,7 +57,7 @@ The simulation ensures that no nodes remain isolated, maintaining network connec
 ## Demo Video
 
 A demonstration video of this simulation is available in the same directory as this README:
-[View Demo Video](./p2p-gossip-network-demo.mp4)
+[View Demo Video](./demo.webm)
 
 ## Understanding the Output
 
