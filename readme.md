@@ -1,90 +1,82 @@
 # P2P Gossip Network Simulation
 
-A network simulation built with NS-3 that demonstrates peer-to-peer gossip protocol behavior in distributed networks.
+A network simulation project that models peer-to-peer gossip protocol communication using NS-3. This simulation creates a configurable P2P network where nodes generate and exchange messages (shares) using a gossip protocol.
 
 ## Overview
 
-This simulation models a peer-to-peer network where nodes communicate using a gossip protocol. Each node periodically generates "shares" (messages) and propagates them to its connected peers. The simulation visualizes network topology, message propagation, and collects statistics about the network's behavior.
+This project simulates a peer-to-peer network where nodes communicate using a gossip protocol. Each node in the network:
+
+- Connects to other nodes based on a configurable probability
+- Periodically generates new message shares
+- Forwards received shares to its connected peers
+- Tracks statistics on shares generated, received, and forwarded
+
+The simulation ensures that no nodes remain isolated, maintaining network connectivity for all participants.
 
 ## Features
 
 - Random network topology generation with configurable connection probability
-- Configurable network parameters (latency, data rate)
-- Visualization of network topology and message propagation using NetAnim
-- Comprehensive statistics collection and reporting
-- TCP-based communication between nodes
+- Guaranteed connectivity (no isolated nodes)
+- Configurable latency between nodes
+- TCP-based communication using NS-3 socket API
+- Network visualization with NetAnim
+- Detailed statistics and logs
+- Automatic share generation and propagation
 
 ## Requirements
 
 - NS-3 (Network Simulator 3)
 - C++ compiler with C++11 support
-- NetAnim for visualization
+- NetAnim (for visualization)
+
+## Project Structure
+
+- `p2pnode.h` - Header file for P2P node implementation
+- `p2pnode.cpp` - Implementation of P2P node functionality
+- `p2pnetwork.cpp` - Main simulation class and entry point
 
 ## Building and Running
 
-1. Make sure NS-3 is installed on your system
-2. Copy the simulation code to your NS-3 scratch directory:
-   ```bash
-   cp p2p-gossip-network.cc ~/ns-3-dev/scratch/
+1. Place these files in your NS-3 scratch directory:
    ```
-3. Navigate to your NS-3 directory and run the simulation:
-   ```bash
-   cd ~/ns-3-dev
-   ./ns3 run p2p-gossip-network.cc
+   cp *.h *.cpp $NS3_DIR/scratch/
    ```
 
-
-## Visualization
-
-The simulation generates an XML file (`p2p-gossip-tcp-animation.xml`) that can be loaded into NetAnim for visualization. The visualization shows:
-
-- Network topology with nodes and connections
-- Color-coded nodes based on their connectivity degree:
-  - Blue: Low degree (≤ 2 connections)
-  - Green: Medium degree (3-4 connections)
-  - Red: High degree (> 4 connections)
-- Message propagation between nodes
-- Node statistics and information
-
-### Running the Visualization
-
-1. After running the simulation, open NetAnim:
-   ```bash
-   cd ~/ns-3-dev/netanim
-   ./NetAnim
+2. run the simulation:
+   ```
+   ./ns3 run scratch/p2pnetwork.cc
    ```
 
-2. In NetAnim, click on "File" > "Open Animation" and select the generated `p2p-gossip-tcp-animation.xml` file.
+## Command Line Arguments
 
-3. Use the NetAnim controls to play, pause, and step through the simulation.
+- `--numNodes`: Number of nodes in the network (default: 10)
+- `--connectionProb`: Probability of connection between nodes (default: 0.3)
+- `--simTime`: Simulation time in seconds (default: 60.0)
+- `--Latency`: Network latency in milliseconds (default: 5.0)
 
-## Demo Visualization
+## Demo Video
 
-[📽️ Demo Video](demo.mp4)
+A demonstration video of this simulation is available in the same directory as this README:
+[View Demo Video](./p2p-gossip-network-demo.mp4)
 
+## Understanding the Output
 
-## Understanding the Code
+The simulation provides detailed logging output:
 
-### Key Classes
+- Periodic statistics at regular intervals
+- Final statistics at the end of the simulation
+- Per-node metrics including:
+  - Shares generated
+  - Shares received
+  - Shares forwarded
+  - Total shares processed
+  - Number of peer connections
 
-- `P2PNode`: Represents a node in the network that can generate and relay shares
-- `Share`: Data structure representing a message passed between nodes
-- `P2PGossipNetworkSimulation`: Main simulation class that sets up the network and runs the simulation
+## How It Works
 
-### Simulation Process
-
-1. Nodes are created and connected based on specified probability
-2. Each node starts generating shares at random intervals
-3. When a node receives a share, it processes it and forwards it to its peers
-4. The simulation collects statistics about share propagation and network behavior
-5. Results are displayed at the end of the simulation
-
-## Collected Statistics
-
-The simulation collects and reports the following statistics:
-
-- Total messages sent across the network
-- Number of shares generated, received, and forwarded by each node
-- Total shares processed by each node
-- Peer count for each node
-
+1. The simulation creates a network with the specified number of nodes
+2. A random topology is generated based on the connection probability
+3. Any isolated nodes are connected to ensure network connectivity
+4. Each node starts generating shares at random intervals
+5. When a node receives a new share, it forwards it to all its peers
+6. Statistics are collected and reported throughout the simulation
