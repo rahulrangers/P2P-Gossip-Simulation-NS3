@@ -152,30 +152,9 @@ void P2PNode::GossipShareToPeers(const Share& share)
     }
 }
 
-void P2PNode::ReceiveShare(const std::string& shareMsg, Ptr<Socket> socket, const Address& from)
-{
-    if (shareMsg.find("REGISTER:") == 0)
-    {
-        size_t colonPos = shareMsg.find(":");
-        if (colonPos != std::string::npos)
-        {
-            uint32_t peerId = std::stoul(shareMsg.substr(colonPos + 1));
-            NS_LOG_INFO("Node " << id << " received registration from peer " << peerId);
-            peersockets[peerId] = socket;
-            peers.push_back(peerId);
-            return;
-        }
-    }
-    
+void P2PNode::ReceiveShare(Share share, Ptr<Socket> socket, const Address& from)
+{    
     sharesReceived++;
-
-    Share share = Share::FromString(shareMsg);
-    if (processedShares.find(share.shareId) != processedShares.end())
-    {
-        NS_LOG_INFO("Node " << id << " already processed share " << share.originNodeId << ":"
-                            << share.shareId);
-        return;
-    }
     processedShares.insert(share.shareId);
 
     NS_LOG_INFO("Node " << id << " received new share " << share.originNodeId << ":"
@@ -195,8 +174,27 @@ void P2PNode::HandleRead(Ptr<Socket> socket)
         packet->CopyData(buffer, packet->GetSize());
         std::string msg = std::string((char*)buffer, packet->GetSize());
         delete[] buffer;
-        
-        ReceiveShare(msg, socket, from);
+        Share share = Share::FromString(msg);
+        if (msg.find("REGISTER:") == 0)
+        {
+            size_t colonPos = msg.find(":");
+            if (colonPos != std::string::npos)
+            {
+                uint32_t peerId = std::stoul(msg.substr(colonPos + 1));
+                NS_LOG_INFO("Node " << id << " received registration from peer " << peerId);
+                peersockets[peerId] = socket;
+                peers.push_back(peerId);
+            }
+        }
+        else if (processedShares.find(share.shareId) != processedShares.end())
+        {
+            NS_LOG_INFO("Node " << id << " already processed share " << share.originNodeId << ":"
+                                << share.shareId);
+        }
+        else
+        {
+        ReceiveShare(share, socket, from);
+        }
     }
 }
 

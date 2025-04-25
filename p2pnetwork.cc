@@ -79,7 +79,7 @@ class P2PGossipNetworkSimulation
             }
 
             if(!connected){
-                if(i==0 && numNodes>0)  ConnectNodes(i, i+1, latency);
+                if(i==0 && numNodes>0)  ConnectNodes(0, 1, latency);
                 else ConnectNodes(i,i-1,latency);
             }
         }

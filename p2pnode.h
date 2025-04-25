@@ -71,7 +71,7 @@ class P2PNode
     void GossipShareToPeers(const Share& share);
     
     // Processes a received share message from another node
-    void ReceiveShare(const std::string& shareMsg, Ptr<Socket> socket, const Address& from);
+    void ReceiveShare(Share shareMsg, Ptr<Socket> socket, const Address& from);
     
     // Callback function for reading data from a socket
     void HandleRead(Ptr<Socket> socket);
